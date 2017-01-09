@@ -58,27 +58,32 @@ public class ChatController {
 		if (!stupidBot.quitChecker(input)) {
 			if (stupidBot.contentChecker(input)) {
 				answer += "\nYou konw my special secret\n";
-			}
-			if (stupidBot.keyboardMashChecker(input)) {
-
-				answer += questionList[(int)(Math.random()*3)];
-
 			} else {
-				if (stupidBot.harambeChecker(input)) {
-					answer += "Harambe was innocent.\n";
+				if (stupidBot.keyboardMashChecker(input)) {
+
+					answer += questionList[(int) (Math.random() * 3)];
+
 				} else {
-					if (stupidBot.memeChecker(input)) {
-						answer += "I can has memes?\n";
+					if (stupidBot.politicalTopicChecker(input)) {
+						answer += "Would you like to talk more about " + input + "?";
 					} else {
-						if (stupidBot.lengthChecker(input)) {
-							answer += "Sorry, I don't know about " + input + ".";
+						if (stupidBot.harambeChecker(input)) {
+							answer += "Harambe was innocent.\n";
 						} else {
-							answer += "Sometimes silence is the answer.";
+							if (stupidBot.memeChecker(input)) {
+								answer += "I can has memes?\n";
+							} else {
+								if (stupidBot.lengthChecker(input)) {
+									answer += "Sorry, I don't know about " + input + ".";
+								} else {
+									answer += "Sometimes silence is the answer.";
+								}
+							}
 						}
 					}
 				}
 			}
-		} else {		
+		} else {
 			chatView.displayMessage("Thank you for chatting!");
 
 			System.exit(0);
