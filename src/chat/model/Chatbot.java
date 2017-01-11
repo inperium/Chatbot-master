@@ -325,46 +325,50 @@ public class Chatbot
 	 * @return Whether or not the response contains HTML.
 	 */
 	
-	public boolean inputHTMLChecker(String input)
-	{
-		boolean html = false;
-		String space = input.replaceAll(" ","");
+	public boolean inputHTMLChecker(String test){
+		int firstOpenTagIndex = -1;
+		int firstCloseTagIndex = -1;
+		int secondOpenTagIndex = -1;
+		int secondCloseTagIndex = -1;
 		
-		if(space.contains("<"))
-		{
-
-			String firstClose = space.substring(space.indexOf('<')+1);
-			if(firstClose.contains(">"))
-			{
-				if(!firstClose.startsWith(">"))
-				{
-					String secondOpen = firstClose.substring(firstClose.indexOf('>')+1);
-					if(secondOpen.contains("</"))
-					{
-						String secondClose = secondOpen.substring(secondOpen.indexOf('<')+1);
-						if(secondClose.contains(">"))
-						{
-							html = true;
-						}
-					}
+		if(test.length() < 3){ // <>
+			return false;
+		}
+		
+		firstOpenTagIndex = test.indexOf('<');
+		firstCloseTagIndex = test.indexOf('>');
+		
+		if(firstOpenTagIndex < 0 || firstCloseTagIndex < 0){ // Coulnd't find < || >
+			return false;
+		}
+		
+		String firstTag = test.substring(firstOpenTagIndex+1, firstCloseTagIndex);
+		
+		if(firstTag.equalsIgnoreCase("p")){ // <P>
+			return true;
+		}else if(firstTag.replaceAll("\\s", "").equals("")){ // < >
+			return false;
+		}
+		
+		secondOpenTagIndex = test.indexOf('<', firstOpenTagIndex+1);
+		secondCloseTagIndex = test.indexOf('>', firstCloseTagIndex+1);
+		
+		if(secondOpenTagIndex < 0 || secondCloseTagIndex < 0 || firstOpenTagIndex == secondOpenTagIndex || firstCloseTagIndex == secondCloseTagIndex){
+			return false;
+		}
+		String secondTag = test.substring(secondOpenTagIndex+2, secondCloseTagIndex);
+		
+		if(firstTag.toLowerCase().startsWith(secondTag.toLowerCase())){
+			if(firstTag.toLowerCase().contains("href")){
+				if(!firstTag.contains("=")){
+					return false;
 				}
+				return true;
+			}else{
+				return true;
 			}
 		}
-		
-		if(space.toLowerCase().contains("href"))
-		{
-			if(!space.toLowerCase().contains("href="))
-			{
-				html = false;
-			}
-		}
-	
-		if(space.contains("<P>"))
-		{
-			html = true;
-		}
-		
-		return html;
+		return false;
 	}
 	
 	/**
@@ -392,10 +396,10 @@ public class Chatbot
 	public boolean twitterChecker(String input)
 	{
 		boolean checkTwitter = false;
-		char sub = input.toCharArray()[0];
-		if(sub == '#' || sub == '@'){
+		if(input.contains("@") || input.contains("#")){
 			checkTwitter = true;
 		}
+
 		return checkTwitter;
 	}
 

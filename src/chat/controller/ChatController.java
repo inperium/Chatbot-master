@@ -1,7 +1,5 @@
 package chat.controller;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import chat.model.Chatbot;
 import chat.view.ChatFrame;
 import chat.view.ChatbotViewer;
@@ -60,9 +58,7 @@ public class ChatController {
 				answer += "\nYou konw my special secret\n";
 			} else {
 				if (stupidBot.keyboardMashChecker(input)) {
-
-					answer += questionList[(int) (Math.random() * 3)];
-
+					answer += "Please do not spam.";
 				} else {
 					if (stupidBot.politicalTopicChecker(input)) {
 						answer += "Would you like to talk more about " + input + "?";
@@ -73,10 +69,18 @@ public class ChatController {
 							if (stupidBot.memeChecker(input)) {
 								answer += "I can has memes?\n";
 							} else {
-								if (stupidBot.lengthChecker(input)) {
-									answer += "Sorry, I don't know about " + input + ".";
+								if (stupidBot.inputHTMLChecker(input)) {
+									answer += "Hey, that's HTML.";
 								} else {
-									answer += "Sometimes silence is the answer.";
+									if (stupidBot.twitterChecker(input)) {
+										answer += "I twitter too.";
+									}else{
+										if (stupidBot.lengthChecker(input)) {
+											answer += "Sorry, I don't know about " + input + ".";
+										} else {
+											answer += "Sometimes silence is the answer.";
+										}
+									}
 								}
 							}
 						}
